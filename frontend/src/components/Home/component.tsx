@@ -25,17 +25,17 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('IP not founded')
+                        throw new Error('IP not founded');
                     } else {
                         return response.text();
                     }
                 })
                 .then(ip => {
-                    this.setState({ip, isIpLoading: false})
+                    this.setState({ip, isIpLoading: false});
                 })
                 .catch(() => {
-                    this.setState({isIpLoading: false})
-                })
+                    this.setState({isIpLoading: false});
+                });
         });
     }
 
@@ -53,6 +53,9 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
                         : ip
                             ? <h3>Для подключения перейдите по адресу: <i>{ip}:3000</i></h3>
                             : <h3 className={'error_message'}>Не удалось вычислить ip-адрес</h3>}
+                    {!isIpLoading
+                        ? <h4 className={'error_message'}>Иначе в командной строке (cmd) ввести ipconfig</h4>
+                        : null}
                 </div>
 
             </div>
