@@ -1,0 +1,31 @@
+.status_label {
+    padding: .2em .5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+    cursor: pointer;
+    color: #FFF;
+    margin: .5em 0;
+}
+
+.status_label.cooking {
+    background-color: var(--color-main-yellow);
+}
+.status_label.cooking:hover {
+    background-color: var(--color-main-yellow-light);
+}
+
+.status_label.done {
+    background-color: var(--color-main-red-dark);
+}
+.status_label.done:hover {
+    background-color: var(--color-main-red);
+}
+
+.status_label.issued {
+    background-color: var(--color-positive-dark);
+}
+.status_label.issued:hover {
+    background-color: var(--color-positive);
+}

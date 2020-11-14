@@ -1,0 +1,26 @@
+.button {
+    background-color: var(--color-main-red);
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: .5em .7em;
+    border-radius: .2em;
+    cursor: pointer;
+    margin: 1em 0;
+}
+
+.button:hover {
+    background-color: var(--color-main-red-light);
+}
+
+.button:active {
+    border: none;
+    background-color: var(--color-main-red-dark);
+}
+
+.button:disabled {
+    border: none;
+    background-color: grey;
+}

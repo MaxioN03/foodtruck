@@ -1,0 +1,45 @@
+.products {
+    margin: 1em;
+    font-family: 'Helvetica';
+}
+
+.add-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.interactive {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.interactive:hover {
+    opacity: .7;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table thead tr {
+    background-color: var(--color-main-red);
+    color: #FFF;
+    text-align: left;
+}
+
+table th, table td {
+    padding: .5em;
+}
+
+table tbody tr {
+
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.product_name {
+    font-weight: bold;
+}

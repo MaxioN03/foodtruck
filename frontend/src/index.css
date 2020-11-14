@@ -1,0 +1,33 @@
+:root {
+    --color-main-red: #a11414;
+    --color-main-red-light: #be1818;
+    --color-main-red-dark: #891111;
+    --color-main-yellow: #fbd95b;
+    --color-main-yellow-light: #ffe36d;
+    --color-main-yellow-dark: #e9ca55;
+    --color-positive: #158920;
+    --color-positive-light: #189f25;
+    --color-positive-dark: #12741b;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica', sans-serif;
+
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.app_table {
+    width: 100%;
+    overflow: auto;
+}
+
+@media screen and (max-width: 600px) {
+    .app_table {
+        font-size: .6em;
+    }
+}

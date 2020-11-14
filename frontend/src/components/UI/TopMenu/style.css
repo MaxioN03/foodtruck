@@ -1,0 +1,31 @@
+.top_menu {
+    width: 100%;
+    background-color: var(--color-main-red);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+}
+
+.top_menu .top_menu_link {
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid var(--color-main-red-dark);
+    border-left: 1px solid var(--color-main-red-dark);
+    color: #FFF;
+    text-decoration: none;
+    padding: 0 1em;
+    transition: all .3s;
+}
+
+.top_menu .top_menu_link:hover {
+    background-color: var(--color-main-red-light);
+}
+
+@media screen and (max-width: 600px) {
+    .top_menu .top_menu_link {
+        font-size: .6em;
+    }
+}
