@@ -1,4 +1,4 @@
-# Проект для FoodTruckKK
+# Проект для FoodTruck
 
 ## Установка (Windows):
 
