@@ -5,6 +5,20 @@
 - Установить **git**
 - Установить **MongoDB**
 - Установить **node**
+- *npm install* в папках **frontend** и **backend**
+- Создать start.bat с содержимым типа:
+`cd C:\mongodb\bin
+ start mongod --dbpath C:\data\db
+ cd C:\Users\user\backend
+ start npm run start:dev
+ cd C:\Users\user\frontend
+ start npm run start`
+- Запустить файл
+
+## Обновление (Windows):
+
+- Создать update.bat с содержимым типа:
+`git pull`
 
 ## Исходный Readme:
 
