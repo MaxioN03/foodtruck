@@ -7,10 +7,14 @@ import Input from "../UI/Input/component";
 import TopMenu from "../UI/TopMenu/component";
 import Spin from "../UI/Spin/component";
 import {Error} from "tslint/lib/error";
+import CheckBox from "../UI/CheckBox/component";
+import InteractiveLine from "../UI/InteractiveLine/component";
 
 interface IProductsState {
     isLoading: boolean,
     loadingError: Error | null,
+    isEditingAvailable: boolean,
+    editingAvailableError: Error | null,
     products: IProduct[],
     isOpenCreateModal: boolean,
     editingProduct: IProduct | null
@@ -21,6 +25,8 @@ export default class Products extends React.Component<{}, IProductsState> {
     state = {
         isLoading: false,
         loadingError: null,
+        isEditingAvailable: false,
+        editingAvailableError: null,
         products: [],
         formData: {name: '', category: '', cost: 0},
         isOpenCreateModal: false,
@@ -29,57 +35,70 @@ export default class Products extends React.Component<{}, IProductsState> {
     };
 
     componentDidMount() {
-        this.getProducts();
+        this.getProducts(true);
     }
 
-    getProducts() {
-        this.setState({isLoading: true, loadingError: null}, () => {
+    getProducts(initial = false) {
+        this.setState({isLoading: initial, loadingError: null, editingAvailableError: null}, () => {
             DAOProducts.getAll().then(products => {
-                this.setState({products, isLoading: false})
+                this.setState({products, isLoading: false});
             }).catch(loadingError => {
-                this.setState({loadingError, isLoading: false})
-            })
+                this.setState({loadingError, isLoading: false});
+            });
         });
     }
 
     openCreateModal() {
-        this.setState({isOpenCreateModal: true})
+        this.setState({isOpenCreateModal: true});
     }
 
     closeCreateModal(success: boolean = false) {
-        this.setState({isOpenCreateModal: false}, () => {
+        this.setState({isOpenCreateModal: false, editingAvailableError: null}, () => {
             if (success) {
-                this.getProducts();
+                this.getProducts(true);
             }
-        })
+        });
     }
 
     openEditModal(editingProduct: IProduct) {
-        this.setState({editingProduct})
+        this.setState({editingProduct});
     }
 
     closeEditModal(success: boolean = false) {
         this.setState({editingProduct: null}, () => {
             if (success) {
-                this.getProducts();
+                this.getProducts(true);
             }
-        })
+        });
     }
 
     openRemoveConfirm(removingProduct: IProduct) {
-        this.setState({removingProduct})
+        this.setState({removingProduct, editingAvailableError: null});
     }
 
     closeRemoveConfirm(success: boolean = false) {
-        this.setState({removingProduct: null}, () => {
+        this.setState({removingProduct: null, editingAvailableError: null}, () => {
             if (success) {
-                this.getProducts();
+                this.getProducts(true);
             }
-        })
+        });
+    }
+
+    onAvailableChange(product: IProduct, value: boolean) {
+        this.setState({isEditingAvailable: true, editingAvailableError: null}, () => {
+            DAOProducts.updateById(product._id || '', Object.assign({}, product, {available: value}))
+                .then(() => {
+                    this.setState({isEditingAvailable: false});
+                    this.getProducts(false);
+                })
+                .catch(editingAvailableError => {
+                    this.setState({editingAvailableError, isEditingAvailable: false});
+                });
+        });
     }
 
     render() {
-        let {isLoading, loadingError, products, isOpenCreateModal} = this.state;
+        let {isLoading, loadingError, products, isOpenCreateModal, isEditingAvailable, editingAvailableError} = this.state;
         let editingProduct: any = this.state.editingProduct;
         let removingProduct: any = this.state.removingProduct;
 
@@ -88,6 +107,9 @@ export default class Products extends React.Component<{}, IProductsState> {
                 <TopMenu/>
                 <div className={'products'}>
                     <h2>Продукты:</h2>
+                    {editingAvailableError
+                        ? <span className={'error_message'}>Ошибка при изменении статуса наличия</span>
+                        : null}
                     {loadingError
                         ? <div className={'error_message'}>Ошибка при загрузке продуктов</div>
                         : isLoading
@@ -100,36 +122,42 @@ export default class Products extends React.Component<{}, IProductsState> {
                                         <th>Название</th>
                                         <th>Категория</th>
                                         <th>Цена, BYN</th>
+                                        <th>Наличие</th>
                                         <th/>
                                         <th/>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {products.map((product, index) => {
-                                        let {name, category, cost} = product;
+                                        let {name, category, cost, available} = product;
                                         return <tr>
                                             <td>{index + 1}</td>
                                             <td>{name}</td>
                                             <td>{category}</td>
                                             <td>{cost}</td>
                                             <td>
-                                        <span className={'interactive'}
-                                              onClick={this.openEditModal.bind(this, product)}>
-                                            Изменить
-                                        </span>
+                                                <CheckBox initialChecked={available} disabled={isEditingAvailable}
+                                                          onChange={this.onAvailableChange.bind(this, product)}/>
                                             </td>
                                             <td>
-                                        <span className={'interactive'}
-                                              onClick={this.openRemoveConfirm.bind(this, product)}>
-                                            Удалить
-                                        </span>
+                                                <InteractiveLine disabled={isEditingAvailable}
+                                                                 onClick={this.openEditModal.bind(this, product)}>
+                                                    Изменить
+                                                </InteractiveLine>
                                             </td>
-                                        </tr>
+                                            <td>
+                                                <InteractiveLine disabled={isEditingAvailable}
+                                                                 onClick={this.openRemoveConfirm.bind(this, product)}>
+                                                    Удалить
+                                                </InteractiveLine>
+                                            </td>
+                                        </tr>;
                                     })}
                                     </tbody>
                                 </table>
                                 : <h3>Продукты не найдены</h3>}
-                    <Button title={'Добавить продукт'} onClick={this.openCreateModal.bind(this)}/>
+                    <Button disabled={isEditingAvailable} title={'Добавить продукт'}
+                            onClick={this.openCreateModal.bind(this)}/>
                     {
                         isOpenCreateModal
                             ? <CreateModal onClose={this.closeCreateModal.bind(this)}/>
@@ -171,7 +199,7 @@ class CreateModal extends React.Component<ICreateModalProps, ICreateModalState> 
     onFormDataChange(field: string, value: string | number) {
         let formData: any = this.state.formData;
         formData[field] = value;
-        this.setState({formData})
+        this.setState({formData});
     }
 
     onCreate() {
@@ -184,8 +212,8 @@ class CreateModal extends React.Component<ICreateModalProps, ICreateModalState> 
                 })
                 .catch(creatingError => {
                     this.setState({creatingError, isCreating: false});
-                })
-        })
+                });
+        });
     }
 
     render() {
@@ -205,7 +233,7 @@ class CreateModal extends React.Component<ICreateModalProps, ICreateModalState> 
                     disabled={!formData.name || !formData.category || !formData.cost}/>
             {isCreating ? <Spin size={'s'}/> : null}
             {creatingError ? <div className={'error_message'}>Ошибка при создании продукта</div> : null}
-        </Modal>
+        </Modal>;
     }
 }
 
@@ -229,13 +257,13 @@ class EditModal extends React.Component<IEditModalProps, IEditModalState> {
 
     componentDidMount() {
         let {product} = this.props;
-        this.setState({formData: {name: product.name, category: product.category, cost: product.cost}})
+        this.setState({formData: {name: product.name, category: product.category, cost: product.cost}});
     }
 
     onFormDataChange(field: string, value: string | number) {
         let formData: any = this.state.formData;
         formData[field] = value;
-        this.setState({formData})
+        this.setState({formData});
     }
 
     onEdit() {
@@ -243,14 +271,14 @@ class EditModal extends React.Component<IEditModalProps, IEditModalState> {
         let {formData} = this.state;
 
         this.setState({isEditing: true, editingError: null}, () => {
-            DAOProducts.updateById(product._id || '', formData)
+            DAOProducts.updateById(product._id || '', Object.assign({available: product.available}, formData))
                 .then(() => {
-                    this.setState({isEditing: false})
+                    this.setState({isEditing: false});
                     onClose(true);
                 })
                 .catch(editingError => {
-                    this.setState({editingError, isEditing: false})
-                })
+                    this.setState({editingError, isEditing: false});
+                });
         });
     }
 
@@ -275,7 +303,7 @@ class EditModal extends React.Component<IEditModalProps, IEditModalState> {
                     disabled={!formData.name || !formData.category || !formData.cost}/>
             {isEditing ? <Spin size={'s'}/> : null}
             {editingError ? <div className={'error_message'}>Ошибка при редактировании продукта</div> : null}
-        </Modal>
+        </Modal>;
     }
 }
 
@@ -306,7 +334,7 @@ class RemoveModal extends React.Component<IRemoveModalProps, IRemoveModalState> 
                 })
                 .catch(removingError => {
                     this.setState({removingError, isRemoving: false});
-                })
+                });
         });
     }
 
@@ -322,6 +350,6 @@ class RemoveModal extends React.Component<IRemoveModalProps, IRemoveModalState> 
                     onClick={this.onRemove.bind(this, product)}/>
             {isRemoving ? <Spin size={'s'}/> : null}
             {removingError ? <div className={'error_message'}>Ошибка при удалении продукта</div> : null}
-        </Modal>
+        </Modal>;
     }
 }

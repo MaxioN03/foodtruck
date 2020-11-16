@@ -1,0 +1,12 @@
+.interactive {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.interactive:hover {
+    opacity: .7;
+}
+
+.disabled {
+    opacity: .7;
+}
