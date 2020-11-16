@@ -2,6 +2,7 @@ export interface IProduct {
     name: string,
     category: string,
     cost: number,
+    available: boolean,
     _id?: string
 }
 
@@ -31,7 +32,6 @@ export default class DAOProducts {
             mode: 'cors'
         })
             .then(response => {
-                console.log('response', response);
                 return response;
             })
             .catch(error => {

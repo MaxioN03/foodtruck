@@ -2,7 +2,7 @@ let ObjectID = require('mongodb').ObjectID;
 
 module.exports = function(app, db) {
   app.post('/products', (req, res) => {
-    const product = {name: req.body.name, category: req.body.category, cost: +req.body.cost};
+    const product = {name: req.body.name, category: req.body.category, cost: +req.body.cost, available: req.body.available};
 
     db.db('foodtruck').collection('products').insertOne(product)
         .then(response => {
@@ -50,7 +50,7 @@ module.exports = function(app, db) {
   app.put ('/products/:id', (req, res) => {
     const id = req.params.id;
     const details = { '_id': new ObjectID(id) };
-    const product = {name: req.body.name, category: req.body.category, cost: +req.body.cost};
+    const product = {name: req.body.name, category: req.body.category, cost: +req.body.cost, available: req.body.available};
 
     db.db('foodtruck').collection('products').update(details, product, (err, result) => {
       if (err) {
