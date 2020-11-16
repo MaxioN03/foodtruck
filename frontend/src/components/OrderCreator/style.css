@@ -24,6 +24,18 @@
     background-color: var(--color-main-red-dark);
 }
 
+.product_card.unavailable {
+    background-color: var(--color-default);
+}
+
+.product_card.unavailable:hover {
+    background-color: var(--color-default-light);
+}
+
+.product_card.unavailable:active {
+    background-color: var(--color-default-dark);
+}
+
 .product_card .product_info {
     padding: .5em;
     display: flex;
@@ -36,6 +48,15 @@
     align-items: center;
     width: 3em;
     background-color: var(--color-main-red-light);
+    height: 3em;
+}
+
+.product_card.unavailable .order_info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3em;
+    background-color: var(--color-default-light);
     height: 3em;
 }
 

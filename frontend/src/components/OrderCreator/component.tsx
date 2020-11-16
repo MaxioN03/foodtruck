@@ -171,10 +171,10 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                                     <h2>{categoryKey}</h2>
                                     <div className={'product_cards_container'}>
                                         {productsByCategory.map((productByCategory: IProduct) => {
-                                            let {name, cost} = productByCategory;
+                                            let {name, cost, available} = productByCategory;
                                             let currentSelected = orders.filter(order => order.productName === productByCategory.name)[0];
 
-                                            return <div className={'product_card'}
+                                            return <div className={`product_card ${available ? '' : 'unavailable'}`}
                                                         onClick={this.onCardClick.bind(this, productByCategory)}>
                                                 <div className={'product_info'}>
                                                     <div className={'name'}>{name}</div>
