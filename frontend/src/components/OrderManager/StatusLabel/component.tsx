@@ -64,7 +64,7 @@ export default class StatusLabel extends React.Component<IStatusLabelProps, ISta
                         let statusValue = OrderStatus[statusKey];
                         let statusDisplayName = OrderStatusDisplay[statusValue] || statusValue;
 
-                        return <div key={statusValue} className={`status_label ${statusValue}`}
+                        return <div key={statusValue} className={`status_label ${statusValue} big`}
                                     onClick={this.changeStatus.bind(this, statusValue)}>
                             {statusDisplayName}
                         </div>;
