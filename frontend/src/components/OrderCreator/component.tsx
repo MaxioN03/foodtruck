@@ -176,14 +176,15 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                             : Object.keys(products).sort().map(categoryKey => {
                                 let productsByCategory = products[categoryKey];
 
-                                return <div>
+                                return <div key={categoryKey}>
                                     <h2>{categoryKey}</h2>
                                     <div className={'product_cards_container'}>
                                         {productsByCategory.map((productByCategory: IProduct) => {
                                             let {name, cost, available} = productByCategory;
                                             let currentSelected = orders.filter(order => order.productName === productByCategory.name)[0];
 
-                                            return <div className={`product_card ${available ? '' : 'unavailable'}`}
+                                            return <div key={name}
+                                                        className={`product_card ${available ? '' : 'unavailable'}`}
                                                         onClick={this.onCardClick.bind(this, productByCategory)}>
                                                 <div className={'product_info'}>
                                                     <div className={'name'}>{name}</div>
@@ -215,8 +216,15 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                                 <tbody>
                                 {orders.map(order => {
                                     let {productName, count, cost, totalCost} = order;
+                                    let productsMap: any = Object.values(products).reduce((result: any[], productsArr: any[]) => {
+                                        result.push(...productsArr);
+                                        return result;
+                                    }, []);
 
-                                    return <tr>
+                                    let productInfo = productsMap.find((product: any) => product.name === productName);
+                                    let available = productInfo.available;
+
+                                    return <tr key={productName} className={available ? '' : 'not_available'}>
                                         <td>{productName}</td>
                                         <td>{cost}</td>
                                         <td>{count}</td>
