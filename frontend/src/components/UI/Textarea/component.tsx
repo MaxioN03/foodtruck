@@ -5,7 +5,8 @@ interface ITextAreaProps {
     placeholder?: string,
     disabled?: boolean,
     initialValue?: string | number,
-    onChange: (value: number | string) => void
+    onChange: (value: number | string) => void,
+    className?: string
 }
 
 interface ITextAreaState {
@@ -37,12 +38,12 @@ export default class TextArea extends React.Component<ITextAreaProps, ITextAreaS
     }
 
     render() {
-        let {placeholder, disabled} = this.props;
+        let {placeholder, disabled, className} = this.props;
         let {value} = this.state;
         return <textarea placeholder={placeholder || ''}
                          disabled={disabled}
                          value={value}
-                         className={'input'}
+                         className={`input ${className ? className : ''}`}
                          onChange={this.onChange.bind(this)}/>;
     }
 }

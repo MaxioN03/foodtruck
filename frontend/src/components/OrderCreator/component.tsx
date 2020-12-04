@@ -8,6 +8,7 @@ import TopMenu from "../UI/TopMenu/component";
 import moment = require("moment");
 import {Error} from "tslint/lib/error";
 import Spin from "../UI/Spin/component";
+import TextArea from "../UI/Textarea/component";
 
 interface IOrder {
     productName: string,
@@ -24,6 +25,7 @@ interface IOrderCreatorState {
     products: any,
     orders: IOrder[],
     name: string,
+    comment: string,
     isNewOrderCreated: boolean,
     isProductsLoading: boolean,
     productsLoadingError: Error | null,
@@ -34,6 +36,7 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
         products: {},
         orders: [],
         name: '',
+        comment: '',
         isNewOrderCreated: false,
         isProductsLoading: false,
         productsLoadingError: null,
@@ -51,10 +54,10 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                         let {category} = product;
 
                         if (result[category]) {
-                            result[category].push(product)
+                            result[category].push(product);
                         }
                         else {
-                            result[category] = [product]
+                            result[category] = [product];
                         }
 
                         return result;
@@ -88,7 +91,7 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                             cost: cost
                         };
 
-                        result.push(newOrder)
+                        result.push(newOrder);
                     }
                 }
 
@@ -107,20 +110,25 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                     cost: product.cost,
                     totalCost: product.cost,
                     count: 1
-                })
+                });
             }
         }
 
-        this.setState({orders, isNewOrderCreated: false})
+        this.setState({orders, isNewOrderCreated: false});
     }
 
     onNameChange(name: string) {
-        this.setState({name, isNewOrderCreated: false})
+        this.setState({name, isNewOrderCreated: false});
+    }
+
+    onCommentChange(comment: string) {
+        this.setState({comment, isNewOrderCreated: false});
     }
 
     createOrder() {
         let orders: IOrder[] = this.state.orders;
         let name = this.state.name;
+        let comment = this.state.comment;
 
         let cost = orders.reduce((result: number, order) => {
             let {totalCost} = order;
@@ -131,11 +139,12 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
         let products = orders.map(order => {
             let {productName, count} = order;
 
-            return {name: productName, count}
+            return {name: productName, count};
         });
 
         let order: IOrderInfo = {
             clientName: name,
+            comment,
             cost,
             products,
             status: OrderStatus.COOKING,
@@ -144,7 +153,7 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
 
         DAOOrders.create(order).then(() => {
             this.setState({orders: [], name: '', isNewOrderCreated: true});
-        })
+        });
     }
 
     render() {
@@ -184,11 +193,11 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                                                     {currentSelected ? currentSelected.count : null}
                                                 </div>
 
-                                            </div>
+                                            </div>;
                                         })}
                                     </div>
 
-                                </div>
+                                </div>;
                             })
                     }
                     <h2>Итог:</h2>
@@ -212,7 +221,7 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                                         <td>{cost}</td>
                                         <td>{count}</td>
                                         <td>{totalCost}</td>
-                                    </tr>
+                                    </tr>;
                                 })}
                                 </tbody>
                             </table>
@@ -227,8 +236,11 @@ export default class OrderCreator extends React.Component<IOrderCreatorProps, IO
                                 }, 0)}
                             </span>
                             </div>
-                            <div>
-                                <Input onChange={this.onNameChange.bind(this)} placeholder={'Имя'}/>
+                            <div className={'order_inputs'}>
+                                <Input onChange={this.onNameChange.bind(this)} placeholder={'Имя'}
+                                       className={'order_input'}/>
+                                <TextArea onChange={this.onCommentChange.bind(this)} placeholder={'Комментарий'}
+                                          className={'order_input'}/>
                             </div>
                             <Button title={'Создать заказ'} onClick={this.createOrder.bind(this)}
                                     disabled={!name || !orders.length}/>

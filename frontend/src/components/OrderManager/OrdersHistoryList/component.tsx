@@ -33,13 +33,14 @@ export default class OrdersHistoryListList extends React.Component<IOrdersHistor
                                 <th>Имя</th>
                                 <th>Статус</th>
                                 <th>Время создания</th>
+                                <th>Комментарий</th>
                                 <th>Продукты</th>
                                 <th>Сумма</th>
                             </tr>
                             </thead>
                             <tbody>
                             {ordersHistory.map((order, index) => {
-                                let {clientName, cost, products, _id, createTime} = order;
+                                let {clientName, cost, products, _id, createTime, comment} = order;
 
                                 return <tr key={_id}>
                                     <td>{index + 1}</td>
@@ -49,6 +50,9 @@ export default class OrdersHistoryListList extends React.Component<IOrdersHistor
                                     </td>
                                     <td>
                                         {createTime && moment(createTime).format('DD.MM.YYYY HH:mm') || '-'}
+                                    </td>
+                                    <td>
+                                        {comment || ''}
                                     </td>
                                     <td>
                                         {products.map(product => {

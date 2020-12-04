@@ -20,6 +20,7 @@ export interface IOrderInfo {
     cost: number,
     status: string,
     createTime: number,
+    comment?: string,
     _id?: string
 }
 
@@ -49,12 +50,11 @@ export default class DAOOrders {
             mode: 'cors'
         })
             .then(response => {
-                console.log('response', response);
                 return response;
             })
             .catch(error => {
-                return error
-            })
+                return error;
+            });
     }
 
     static async removeById(id: string) {

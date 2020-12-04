@@ -8,6 +8,7 @@ interface IInputProps {
     onChange: (value: number | string) => void,
     type?: string,
     step?: string,
+    className?: string
 }
 
 interface IInputState {
@@ -34,19 +35,19 @@ export default class Input extends React.Component<IInputProps, IInputState> {
     onChange(event: any) {
         let value: string | number = event.target.value;
         this.setState({value}, () => {
-            this.props.onChange(value)
-        })
+            this.props.onChange(value);
+        });
     }
 
     render() {
-        let {placeholder, disabled, type, step} = this.props;
+        let {placeholder, disabled, type, step, className} = this.props;
         let {value} = this.state;
         return <input placeholder={placeholder || ''}
                       disabled={disabled}
                       value={value}
-                      className={'input'}
+                      className={`input ${className ? className : ''}`}
                       type={type}
                       step={step}
-                      onChange={this.onChange.bind(this)}/>
+                      onChange={this.onChange.bind(this)}/>;
     }
 }

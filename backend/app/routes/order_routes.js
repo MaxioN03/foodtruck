@@ -8,6 +8,7 @@ module.exports = function(app, db) {
       status: req.body.status,
       cost: +req.body.cost,
       createTime: +req.body.createTime,
+      comment: req.body.comment
     };
 
     db.db('foodtruck').collection('orders').insertOne(order)
@@ -61,7 +62,8 @@ module.exports = function(app, db) {
       products: req.body.products,
       status: req.body.status,
       cost: +req.body.cost,
-      createTime: +req.body.createTime
+      createTime: +req.body.createTime,
+      comment: req.body.comment
     };
 
     db.db('foodtruck')

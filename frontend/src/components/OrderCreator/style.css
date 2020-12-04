@@ -90,3 +90,8 @@
 .total_cost .total_cost_number:after {
     content: ' BYN';
 }
+
+.order_inputs {
+    display: flex;
+    flex-direction: column;
+}
