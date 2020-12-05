@@ -46,7 +46,7 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
             <div>
                 <TopMenu/>
                 <div className={'home'}>
-                    <h1>Домашняя страница</h1>
+                    <h1>Домашняя страница ааааа</h1>
                     <h3>Для навигации используйте меню сверху</h3>
                     {isIpLoading
                         ? <Spin size={'s'}/>
