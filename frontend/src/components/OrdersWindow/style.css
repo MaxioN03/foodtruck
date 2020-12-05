@@ -1,5 +1,6 @@
 .orders_window {
     display: flex;
+    font-size: 3em;
 }
 
 .orders_window .block {
@@ -11,6 +12,7 @@
 
 .orders_window .block.cooking {
     background-color: var(--color-main-red);
+
 }
 
 .orders_window .block.done {
@@ -33,10 +35,15 @@
     align-items: center;
     color: #fff;
     padding: 1rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .order_block.type_cooking {
     background-color: var(--color-main-yellow);
+    color: var(--color-main-red-dark)
 }
 
 .order_block.type_done {
